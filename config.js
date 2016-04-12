@@ -45,10 +45,13 @@ var config = {
     },
     traffic: {
       key : "AuQA8BX3Y6AfpA2CzydPdc6_ig4Z2r_bXFU2nJ316o6ykuBlm0J-e--wfBk9s-yA", // Bing Maps API Key
+      reload_interval : 5, // Number of minutes the information is refreshed
+      // An array of tips that you would like to display travel time for
+      trips : [{
       mode : "Driving", // Possibilities: Driving / Transit / Walking
       origin : "Martin-Luther-Strasse 28, Eschweiler, Deutschland", // Start of your trip. Human readable address.
       destination : "Hansemannplatz Aachen, Deutschland", // Destination of your trip. Human readable address.
       name : "Hansemannplatz", // Name of your destination ex: "work"
-      reload_interval : 5 // Number of minutes the information is refreshed
+      }]
     }
 };
