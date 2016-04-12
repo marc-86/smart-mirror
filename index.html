@@ -31,6 +31,7 @@
     <script src="js/timer-service.js"></script>
     <script src="js/geolocation-service.js"></script>
     <script src="js/calendar-service.js"></script>
+    <script src="js/bluetooth.js"></script>
     <script src="js/traffic-service.js"></script>
     <script src="js/fitbit-service.js"></script> 
     <script src="js/controller.js"></script>
@@ -52,9 +53,9 @@
         <ul class="calendar fade" ng-show="focus == 'default'">
             <li class="event" ng-repeat="event in calendar">
                 <div class="event-details">
-                    <span class="day">{{event.start.format('dddd') | uppercase}}</span>
-                    <span class="summary">{{event.SUMMARY}}</span>
-                    <div class="details">{{event.start.format('LLL')}}</div>
+                    <span class="day">{{eventi.dayText}}</span>
+                    <span class="summary">{{eventi.summary}}</span>
+                    <div class="details">{{eventi.detailText}}</div>
                 </div>
             </li>
         </ul>
@@ -95,6 +96,13 @@
     <div class="container">
       <div class="middle-center">
         <h1>{{greeting}}</h1>
+        <div ng-show="(focus == 'default') && (bluetoothDevices.length > 0)"> 
+			<ul class="calendar fade" >
+				<li class="event" ng-repeat="id in bluetoothDevices">
+					<h2>{{id}}</h2>
+				</li>
+			</ul>
+        </div>
         <h3 ng-show="!(user.name === undefined)">{{user.name}}</h3>
         <!-- <div class="listening" ng-show="listening">Ready: {{focus}}</div> -->
         <div class="contents-box map animate-grow" ng-show="focus == 'map'">

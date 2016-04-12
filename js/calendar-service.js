@@ -7,149 +7,95 @@
     service.events = [];
 
     service.getCalendarEvents = function() {
-      service.events = [];
+      service.events = []; 
       return loadFile(config.calendar.icals);
-    }
+    };
+
+  function CustomizeEvents(events){
+	angular.forEach(events, function(event){
+		event.start = moment(event.start);
+		event.end = moment(event.end);
+		
+		var isToday = event.start.isSame(moment(), 'day') || event.start.isBefore(moment());
+		var isTomorrow = event.start.isSame(moment().add(1, 'd'), 'day');
+		var isThisWeek = event.start.isSame(moment(),'week');
+		if(isToday){
+			event.dayText = 'Heute';
+		}else if(isTomorrow){
+			event.dayText = 'Morgen';
+		}else if(isThisWeek){
+			event.dayText = event.start.format('dd');
+		}else{
+			event.dayText = event.start.format('Do');
+		}
+		
+		//Write a better text for details to be displayed
+		var fromText = "";
+		var toText = "";
+		var isDayEvent = event.start.hour()===0 && event.start.minute()===0;
+		//~ console.log(event);
+		if(isDayEvent){
+			if(!event.start.isSame(event.end, 'day')){
+				fromText = event.start.format('dddd, Do');
+			}else{
+				fromText = event.start.format('dddd, Do MMMM YYYY');
+			}
+		}
+		else{
+			fromText = event.start.format('dddd, Do MMMM YYYY HH:mm');
+		}
+		
+		if(!event.start.isSame(moment(event.end), 'day')){
+			toText = " - " + event.end.second(-1).format('dddd, Do MMMM YYYY');
+		}else if(!isDayEvent){
+			toText = " - " + event.end.format('HH:mm');
+		}
+		
+		event.detailText = fromText + toText;
+	});
+	}
 
     var loadFile = function(urls) {
       var promises = [];
-
-      angular.forEach(urls, function(url) {
-        promises.push($http.get(url));
-      });
-
-      return $q.all(promises).then(function(data) {
+	  var ical = require('ical');
+	  
+	  // Load every url and create promise
+	  angular.forEach(urls, function(url) {
+        var deferred = $q.defer();
+        promises.push(deferred.promise);
+        ical.fromURL(url, {}, function(err, data){
+			if(err){
+				deferred.reject(err)
+			}else{
+				deferred.resolve(data);
+			}
+		  });
+	  });	 
+	  
+	  // When all promises ready...	  
+	  return $q.all(promises).then(function(data) {        
+        
         for (var i = 0; i < promises.length; i++) {
-          parseICAL(data[i].data);
-        }
+		  var events = [];
+		   
+		  for(var k in data[i]){
+		    if(data[i].hasOwnProperty(k)){
+			  var ev = data[i][k];
+			  //~ console.log(ev);
+			  ev.end = moment(ev.end);
+			  ev.start = moment(ev.start);
+			  events.push(ev);
+			}
+		  }
+		  
+		  service.events.push.apply(service.events, events);
+		};
+      
+      CustomizeEvents(service.events);
+      
       });
-    }
+    };
 
-    var makeDate = function(type, ical_date) {
-        if(ical_date.endsWith('Z')){
-            return moment(ical_date, 'YYYYMMDDTHHmmssZ');
-        }
-
-        if(!type.endsWith('VALUE=DATE')){
-            return moment(ical_date, 'YYYYMMDDTHHmmss');
-        } else {
-            return moment(ical_date, 'YYYYMMDD');
-        }
-    }
-
-    var parseICAL = function(data) {
-      //Ensure cal is empty
-      var events = [];
-
-      //Clean string and split the file so we can handle it (line by line)
-      var cal_array = data.replace(new RegExp("\\r", "g"), "").replace(/\n /g, "").split("\n");
-
-      //Keep track of when we are activly parsing an event
-      var in_event = false;
-      //Use as a holder for the current event being proccessed.
-      var cur_event = null;
-      for (var i = 0; i < cal_array.length; i++) {
-        var ln = cal_array[i];
-        //If we encounted a new Event, create a blank event object + set in event options.
-        if (!in_event && ln == 'BEGIN:VEVENT') {
-          var in_event = true;
-          var cur_event = {};
-        }
-        //If we encounter end event, complete the object and add it to our events array then clear it for reuse.
-        if (in_event && ln == 'END:VEVENT') {
-          in_event = false;
-          if(!contains(events, cur_event)) {
-            events.push(cur_event);
-          }
-          cur_event = null;
-        }
-        //If we are in an event
-        else if (in_event) {
-          //var lntrim = ln.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-          //var lnsplit = lntrim.split(':');
-          //type = lnsplit[0];
-          //val = lnsplit[1];
-
-          //Split the item based on the first ":"
-          var idx = ln.indexOf(':');
-          //Apply trimming to values to reduce risks of badly formatted ical files.
-          var type = ln.substr(0, idx).replace(/^\s\s*/, '').replace(/\s\s*$/, ''); //Trim
-          var val = ln.substr(idx + 1).replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-
-          //If the type is a start date, proccess it and store details
-          if (type.startsWith('DTSTART')) {
-            cur_event.start = makeDate(type, val);
-          }
-
-          //If the type is an end date, do the same as above
-          else if (type.startsWith('DTEND')) {
-            cur_event.end = makeDate(type, val);
-          }
-          //Convert timestamp
-          else if (type == 'DTSTAMP') {
-            //val = makeDate(type, val);
-          } else {
-            val = val
-              .replace(/\\r\\n/g, '<br />')
-              .replace(/\\n/g, '<br />')
-              .replace(/\\,/g, ',');
-          }
-
-          //Add the value to our event object.
-          if ( type !== 'SUMMARY' || (type=='SUMMARY' && cur_event['SUMMARY'] == undefined)) {
-            cur_event[type] = val;
-          }
-          if (cur_event['SUMMARY'] !== undefined && cur_event['RRULE'] !== undefined &&
-              cur_event['DTSTART'] !== undefined && cur_event['DTEND'] !== undefined) {
-            var options = new RRule.parseString(cur_event['RRULE']);
-      			options.dtstart = cur_event.start.toDate();
-      			var event_duration = cur_event.end.diff(cur_event.start,'minutes');
-      			var rule = new RRule(options);
-            var oneYear = new Date();
-      			oneYear.setFullYear(oneYear.getFullYear() + 1);
-      			var dates = rule.between(new Date(), oneYear, true, function (date, i){return i < 10});
-      			for (var date in dates) {
-              var recuring_event = {};
-              recuring_event.SUMMARY = cur_event.SUMMARY;
-      				var dt = new Date(dates[date]);
-      				var startDate = moment(dt);
-      				var endDate = moment(dt);
-              endDate.add(event_duration, 'minutes');
-              recuring_event.start = startDate;
-              recuring_event.end = endDate;
-              if(!contains(events, recuring_event)) {
-                events.push(recuring_event);
-              }
-      			}
-          }
-        }
-      }
-      //Add all of the extracted events to the CalendarService
-      service.events.push.apply(service.events, events);
-    }
-
-    var contains = function(input, obj) {
-      var i = input.length;
-      while (i--) {
-        var current = input[i];
-        if (obj.start.isValid()) {
-          if (current.start.isSame(obj.start.toDate()) && current.SUMMARY === obj.SUMMARY) {
-            return true;
-          }
-        }
-      }
-      return false;
-    }
-
-    Array.prototype.contains = function(obj) {
-        var i = this.length;
-        while (i--) {
-            if (this[i] === obj) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     service.getEvents = function(events) {
       return service.events;
@@ -159,12 +105,12 @@
       var future_events = [],
         current_date = new moment(),
         end_date = new moment().add(config.calendar.maxDays, 'days');
-
+		
       service.events.forEach(function(itm) {
         //If the event started before current time but ends after the current time or
         // if there is no end time and the event starts between today and the max number of days add it.
         if ((itm.end != undefined && (itm.end.isAfter(current_date) && itm.start.isBefore(current_date))) || itm.start.isBetween(current_date, end_date)){
-            future_events.push(itm);
+          future_events.push(itm);
         }
       });
       future_events = sortAscending(future_events);

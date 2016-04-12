@@ -13,6 +13,7 @@
             GiphyService,
             TrafficService,
             TimerService,
+            BluetoothService,
             $rootScope, $scope, $timeout, $interval, tmhDynamicLocale, $translate) {
         var _this = this;
         $scope.listening = false;
@@ -156,6 +157,21 @@
             };
 
             refreshComic();
+
+			var refreshBluetoothPresentDevices = function() {
+			    BluetoothService.UpdatePresentDevices().then(function(response) {
+                    $scope.bluetoothDevices = BluetoothService.PresentDevices();
+                }, function(error) {
+                    console.log(error);
+                });
+			}
+			
+			//~ TODO:
+			//~ 1. alle 5 sekunden prüfen, ob ein device abgelaufen ist
+			//~ 2. bei vorhanden defice			
+			//~ refreshBluetoothPresent();
+            $interval(refreshBluetoothPresentDevices, config.bluetooth.refreshTime * 1000);
+
             var defaultView = function() {
                 console.debug("Ok, going to default view...");
                 $scope.focus = "default";
