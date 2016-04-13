@@ -2,17 +2,14 @@
     'use strict';
 
     function MirrorCtrl(
-            AnnyangService,
             GeolocationService,
             WeatherService,
             FitbitService,
             MapService,
             HueService,
             CalendarService,
-            ComicService,
             GiphyService,
             TrafficService,
-            TimerService,
             BluetoothService,
             $rootScope, $scope, $timeout, $interval, tmhDynamicLocale, $translate) {
         var _this = this;
@@ -147,17 +144,6 @@
             refreshTrafficData();
             $interval(refreshTrafficData, config.traffic.reload_interval * 60000);
 
-            var refreshComic = function () {
-            	console.log("Refreshing comic");
-            	ComicService.initDilbert().then(function(data) {
-            		console.log("Dilbert comic initialized");
-            	}, function(error) {
-            		console.log(error);
-            	});
-            };
-
-            refreshComic();
-
 			var refreshBluetoothPresentDevices = function() {
 			    BluetoothService.UpdatePresentDevices().then(function(response) {
                     $scope.bluetoothDevices = BluetoothService.PresentDevices();
@@ -167,216 +153,10 @@
 			}
 			
 			//~ TODO:
-			//~ 1. alle 5 sekunden prüfen, ob ein device abgelaufen ist
+			//~ 1. alle 5 sekunden prï¿½fen, ob ein device abgelaufen ist
 			//~ 2. bei vorhanden defice			
 			//~ refreshBluetoothPresent();
             $interval(refreshBluetoothPresentDevices, config.bluetooth.refreshTime * 1000);
-
-            var defaultView = function() {
-                console.debug("Ok, going to default view...");
-                $scope.focus = "default";
-            }
-
-            $interval(refreshComic, 12*60*60000); // 12 hours
-
-            var addCommand = function(commandId, commandFunction){
-                var voiceId = 'commands.'+commandId+'.voice';
-                var textId = 'commands.'+commandId+'.text';
-                var descId = 'commands.'+commandId+'.description';
-                $translate([voiceId, textId, descId]).then(function (translations) {
-                    AnnyangService.addCommand(translations[voiceId], commandFunction);
-                    if (translations[textId] != '') {
-                        var command = {"text": translations[textId], "description": translations[descId]};
-                        $scope.commands.push(command);
-                    }
-                });
-            };
-
-            // List commands
-            addCommand('list', function() {
-                console.debug("Here is a list of commands...");
-                console.log(AnnyangService.commands);
-                $scope.focus = "commands";
-            });
-
-            
-            // Go back to default view
-            addCommand('home', defaultView);
-
-            // Hide everything and "sleep"
-            addCommand('sleep', function() {
-                console.debug("Ok, going to sleep...");
-                $scope.focus = "sleep";
-            });
-
-            // Go back to default view
-            addCommand('wake_up', defaultView);
-
-            // Hide everything and "sleep"
-            addCommand('debug', function() {
-                console.debug("Boop Boop. Showing debug info...");
-                $scope.debug = true;
-            });
-            
-            // Show map
-            addCommand('map_show', function() {
-                console.debug("Going on an adventure?");
-                GeolocationService.getLocation({enableHighAccuracy: true}).then(function(geoposition){
-                    console.log("Geoposition", geoposition);
-                    $scope.map = MapService.generateMap(geoposition.coords.latitude+','+geoposition.coords.longitude);
-                    $scope.focus = "map";
-                });
-            });
-            
-            // Hide everything and "sleep"
-            addCommand('map_location', function(location) {
-                console.debug("Getting map of", location);
-                $scope.map = MapService.generateMap(location);
-                $scope.focus = "map";
-            });
-
-            // Zoom in map
-            addCommand('map_zoom_in', function() {
-                console.debug("Zoooooooom!!!");
-                $scope.map = MapService.zoomIn();
-            });
-
-            addCommand('map_zoom_out', function() {
-                console.debug("Moooooooooz!!!");
-                $scope.map = MapService.zoomOut();
-            });
-
-            addCommand('map_zoom_point', function(value) {
-                console.debug("Moooop!!!", value);
-                $scope.map = MapService.zoomTo(value);
-            });
-
-            addCommand('map_zoom_reset', function() {
-                console.debug("Zoooommmmmzzz00000!!!");
-                $scope.map = MapService.reset();
-                $scope.focus = "map";
-            });
-
-            // Search images
-            addCommand('images_search', function(term) {
-                console.debug("Showing", term);
-            });
-
-            // Set a reminder
-            addCommand('reminder_insert', function(task) {
-                console.debug("I'll remind you to", task);
-            });
-
-            // Clear reminders
-            addCommand('reminder_clear', function() {
-                console.debug("Clearing reminders");
-            });
-
-            // Check the time
-            addCommand('time_show', function(task) {
-                 console.debug("It is", moment().format('h:mm:ss a'));
-            });
-
-            // Turn lights off
-            addCommand('light_action', function(state, action) {
-                HueService.performUpdate(state + " " + action);
-            });
-
-            //Show giphy image
-            addCommand('image_giphy', function(img) {
-                GiphyService.init(img).then(function(){
-                    $scope.gifimg = GiphyService.giphyImg();
-                    $scope.focus = "gif";
-                });
-            });
-
-            //Show fitbit stats (registered only if fitbit is configured in the main config)
-            if ($scope.fitbitEnabled) {
-                AnnyangService.addCommand('show my walking', function() {
-                    refreshFitbitData();
-                });
-            }
-
-            // Show xkcd comic
-            addCommand('image_comic', function(state, action) {
-                console.debug("Fetching a comic for you.");
-                ComicService.getXKCD().then(function(data){
-                    $scope.xkcd = data.img;
-                    $scope.focus = "xkcd";
-                });
-            });
-
-            // Show Dilbert comic
-            addCommand('image_comic_dilbert', function(state, action) {
-                console.debug("Fetching a Dilbert comic for you.");
-                $scope.dilbert = ComicService.getDilbert("today");  // call it with "random" for random comic
-                $scope.focus = "dilbert";
-            });
-
-            // Start timer
-            addCommand('timer_start', function(duration) {
-                console.debug("Starting timer");
-                TimerService.start(duration);
-                $scope.timer = TimerService;
-                $scope.focus = "timer";
-
-                $scope.$watch('timer.countdown', function(countdown){
-                    if (countdown === 0) {
-                        TimerService.stop();
-                        // defaultView();
-                    }
-                });
-            });
-
-            // Show timer
-            addCommand('timer_show', function() {
-              if (TimerService.running) {
-                // Update animation
-                if (TimerService.paused) {
-                  TimerService.start();
-                  TimerService.stop();
-                } else {
-                  TimerService.start();
-                }
-
-                $scope.focus = "timer";
-              }
-            });
-
-            // Stop timer
-            addCommand('timer_stop', function() {
-              if (TimerService.running && !TimerService.paused) {
-                TimerService.stop();
-              }
-            });
-
-            // Resume timer
-            addCommand('timer_resume', function() {
-              if (TimerService.running && TimerService.paused) {
-                TimerService.start();
-                $scope.focus = "timer";
-              }
-            });
-
-            var resetCommandTimeout;
-            //Track when the Annyang is listening to us
-            AnnyangService.start(function(listening){
-                $scope.listening = listening;
-            }, function(interimResult){
-                $scope.interimResult = interimResult;
-                $timeout.cancel(resetCommandTimeout);
-            }, function(result){
-                if(typeof result != 'undefined'){
-                    $scope.interimResult = result[0];
-                    resetCommandTimeout = $timeout(restCommand, 5000);
-                }
-            }, function(error){
-                console.log(error);
-                if(error.error == "network"){
-                    $scope.speechError = "Google Speech Recognizer is down :(";
-                    AnnyangService.abort();
-                }
-            });
         };
 
         _this.init();

@@ -40,7 +40,7 @@
               console.error(error.statusText);
               deferred.reject('Unknown error');
             }
-            duration = deferred.promise;
+            trip.duration = deferred.promise;
           });
           return deferred.promise;
         }

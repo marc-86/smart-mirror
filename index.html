@@ -48,7 +48,7 @@
   <body ng-controller="MirrorCtrl as commands" ng-cloak>
     <div class="top">
       <div class="top-left">
-        <div class="date grey">{{date.format('dddd')}}, {{date.format('LL')}}</div>
+        <div class="date grey">{{date.format('dddd')}} {{date.format('LL')}}</div>
         <div class="time">{{date.format('LT')}}</div>
         <ul class="calendar fade" ng-show="focus == 'default'">
             <li class="event" ng-repeat="event in calendar">
