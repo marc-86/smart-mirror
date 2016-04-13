@@ -249,7 +249,7 @@ ul.calendar {
 
 body {
   font-family: 'Work Sans', sans-serif;
-  font-weight: 300; }
+  font-weight: 400; }
 
 .bottom-center {
     display: none;
@@ -275,10 +275,21 @@ body {
     position: relative;
     margin-left: 2px;
     position: fixed;
-    bottom: -10px; }
+    bottom: -10px; 
+    font-size: 26px;}
+  .top-left .calendar span.day {
+    width: 100px;
+  }
+  .top-left .calendar span.summary {
+    max-width: 600px;
+  }
   .top-left .time {
     -webkit-order: 1;
     order: 1; }
+  .top-left .calendar .event-details .details {
+      font-size: 18px;
+      padding-left: 110px;
+  }
 
 /*
 
