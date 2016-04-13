@@ -297,10 +297,14 @@ Weather
 .weather-week-day {
   margin-bottom: 5px; }
 
-.weather .weather-today .icon, .weather .weather-week-day .icon-small {
+.weather .weather-today .icon {
   display: none; }
-.weather .weather-today canvas, .weather .weather-week-day canvas {
+.weather .weather-week-day .icon-small {
   display: inline-block; }
+.weather .weather-today canvas {
+  display: inline-block; }
+.weather .weather-week-day canvas {
+  display: none; }
 .weather .weather-week-descriptor span {
   padding-bottom: 7px;
   margin-bottom: 7px;
