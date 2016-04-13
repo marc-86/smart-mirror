@@ -296,15 +296,20 @@ body {
 Weather
 
 */
+.weather {
+    width: 350px;
+}
 .weather-today .tempreture {
   font-size: 80px; }
-
+.weather-week-descriptor {
+  width: 200px;
+}
 .weather-week-descriptor span.ng-binding {
   text-align: left;
   word-spacing: normal;
   display: inline-block; }
   .weather-week-descriptor span.ng-binding:first-child {
-    font-size: 21px; }
+    font-size: 20px; }
 
 .weather-week-day {
   margin-bottom: 5px; }
