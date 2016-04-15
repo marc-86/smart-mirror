@@ -144,19 +144,19 @@
             refreshTrafficData();
             $interval(refreshTrafficData, config.traffic.reload_interval * 60000);
 
-			var refreshBluetoothPresentDevices = function() {
-			    BluetoothService.UpdatePresentDevices().then(function(response) {
-                    $scope.bluetoothDevices = BluetoothService.PresentDevices();
-                }, function(error) {
-                    console.log(error);
-                });
-			}
+			// var refreshBluetoothPresentDevices = function() {
+			//     BluetoothService.UpdatePresentDevices().then(function(response) {
+            //         $scope.bluetoothDevices = BluetoothService.PresentDevices();
+            //     }, function(error) {
+            //         console.log(error);
+            //     });
+			// }
 			
-			//~ TODO:
-			//~ 1. alle 5 sekunden pr�fen, ob ein device abgelaufen ist
-			//~ 2. bei vorhanden defice			
-			//~ refreshBluetoothPresent();
-            $interval(refreshBluetoothPresentDevices, config.bluetooth.refreshTime * 1000);
+			// //~ TODO:
+			// //~ 1. alle 5 sekunden pr�fen, ob ein device abgelaufen ist
+			// //~ 2. bei vorhanden defice			
+			// //~ refreshBluetoothPresent();
+            // $interval(refreshBluetoothPresentDevices, config.bluetooth.refreshTime * 1000);
         };
 
         _this.init();
