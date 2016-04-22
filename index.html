@@ -64,7 +64,7 @@
         <div class="weather">
           <div class="weather-today">
             <span class="icon dimmed wi {{currentForcast.wi}}"></span>
-            <canvas id="icon_weather_current" width="90" height="70"></canvas>
+            <canvas id="icon_weather_current"></canvas>
             <span class="tempreture">{{currentForcast.temperature}}&deg;</span>
           </div>
           <div class="weather-week-descriptor">
@@ -87,7 +87,7 @@
         </div>
         <div class="traffic" ng-repeat="traffic in trips">
           <div ng-show="!traffic.error" class="traffic-information">
-            <span class="time-to">{{ 'traffic.time_to' | translate:traffic }}</span>
+            <img src="img\auto.gif"></img>
             <span>{{traffic.duration.humanize()}}</span>
           </div>
         </div>

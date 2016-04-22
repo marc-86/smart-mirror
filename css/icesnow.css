@@ -281,7 +281,7 @@ body {
     width: 100px;
   }
   .top-left .calendar span.summary {
-    max-width: 600px;
+     max-width: 600px;
   }
   .top-left .time {
     -webkit-order: 1;
@@ -297,23 +297,25 @@ Weather
 
 */
 .weather {
-    width: 350px;
+    width: initial;
 }
 .weather-today .tempreture {
-  font-size: 80px; }
-.weather-week-descriptor {
+  font-size: 110px; }
+.weather-today canvas {
+  height: 130px;
+  float: right; } 
+/*.weather-week-descriptor {
   width: 200px;
-}
+}*/
 .weather-week-descriptor span.ng-binding {
   text-align: left;
   word-spacing: normal;
   display: inline-block; }
-  .weather-week-descriptor span.ng-binding:first-child {
-    font-size: 20px; }
+.weather-week-descriptor span.ng-binding:first-child {
+  font-size: 20px; }
 
 .weather-week-day {
   margin-bottom: 5px; }
-
 .weather .weather-today .icon {
   display: none; }
 .weather .weather-week-day .icon-small {
@@ -329,4 +331,27 @@ Weather
   border-bottom: 2px solid #aaa; }
 .weather .weather-week-descriptor span:last-child {
   border-bottom: 0; }
-    /*# sourceMappingURL=icesnow.css.map */
+    
+.traffic-information{
+  height: 25px; }
+
+.traffic img {
+  height: 100%; }
+  
+.traffic span {
+  float: right;
+  font-size: 22px; }
+
+.top-left .calendar span.summary {
+  max-width: 400px; }
+
+.calendar::before {
+  content:'';
+  width:100%;
+  height:100%;    
+  position:absolute;
+  left:0;
+  top:0;
+  background:linear-gradient(transparent 150px, black);
+}
+/*# sourceMappingURL=icesnow.css.map */

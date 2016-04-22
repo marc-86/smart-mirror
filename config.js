@@ -15,8 +15,8 @@ var config = {
     },
 
 	bluetooth: {
-		devices : [{id:"44:00:10:AE:5A:BD", name:"Hüsi"},
-			{id:"28:5A:EB:8D:3E:2F", name:"juLe*DeluXe"}],
+		devices : [{id:"44:00:10:AE:5A:BD", name:"marc"},
+			{id:"28:5A:EB:8D:3E:2F", name:"jule"}],
 		refreshTime: 15, //Every refreshTime ist checked for new devices
 		timout: 120, //After timeout a device is marked as away
 		publishTime: 60 //For publishTime a device is shown on the screen
