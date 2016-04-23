@@ -275,7 +275,7 @@ body {
     position: relative;
     margin-left: 2px;
     position: fixed;
-    bottom: -30px; 
+    bottom: -20px; 
     font-size: 26px;}
   .top-left .calendar span.day {
     width: 100px;
@@ -298,11 +298,13 @@ Weather
 */
 .weather {
     width: 235px;
+    margin: 0 10px 0 0;
 }
 .weather-today .tempreture {
   font-size: 54px; 
   position: fixed;
-  right: 0;}
+  right: 10px;
+  top: 10px;}
 .weather-today canvas {
   float: right; } 
 .weather-week-descriptor span.ng-binding {
@@ -333,7 +335,7 @@ Weather
     
 .traffic-information{
   height: 25px;
-  margin: 20px 0; }
+  margin: 20px 10px 0 0; }
 
 .traffic img {
   height: 100%; }
