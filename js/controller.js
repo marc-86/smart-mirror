@@ -151,12 +151,7 @@
                     console.log(error);
                 });
 			}
-			
-			//~ TODO:
-			//~ 1. alle 5 sekunden pr�fen, ob ein device abgelaufen ist
-			//~ 2. bei vorhanden defice			
-			//~ refreshBluetoothPresent();
-            $interval(refreshBluetoothPresentDevices, config.bluetooth.refreshTime * 1000);
+            // $interval(refreshBluetoothPresentDevices, config.bluetooth.refreshTime * 1000);
         };
 
         _this.init();
