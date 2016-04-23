@@ -36,7 +36,7 @@ var config = {
     // Calendar (An array of iCals)
     calendar: {
       icals : ["https://calendar.google.com/calendar/ical/1ongjafuhtohge0om9q0p70nbo%40group.calendar.google.com/private-3e265cd53bc6e4198e56d25a98b52734/basic.ics"],
-      maxResults: 9, // Number of calender events to display (Defaults is 9)
+      maxResults: 7, // Number of calender events to display (Defaults is 9)
       maxDays: 365 // Number of days to display (Default is one year)
     },
     // Giphy
