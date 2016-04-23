@@ -46,7 +46,15 @@
 
   </head>
   <body ng-controller="MirrorCtrl as commands" ng-cloak>
-    <div class="top">
+   <div class="top-center">
+    <span>.</span>
+    <ul class="calendar fade" >
+		  <li class="event" ng-repeat="id in bluetoothDevices">
+			  <h2>{{id}}</h2>
+			</li>
+    </ul>
+   </div>
+   <div class="top">
       <div class="top-left">
         <div class="date grey">{{date.format('dddd')}} {{date.format('LL')}}</div>
         <div class="time">{{date.format('LT')}}</div>
@@ -123,11 +131,6 @@
       </div>
       <div class="bottom-center">
         <!-- Command list -->
-        <ul class="calendar fade" >
-				  <li class="event" ng-repeat="id in bluetoothDevices">
-					  <h2>{{id}}</h2>
-				  </li>
-			  </ul>
         <div class="commands animate-grow" ng-show="focus == 'commands'">
           <h2>{{ 'commands.title' | translate }}</h2>
           <dl>

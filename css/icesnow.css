@@ -346,4 +346,10 @@ Weather
 
 .top-left .calendar span.summary {
   max-width: 400px; }
+  
+.top-center{
+  left: 50%;
+  position: fixed;
+  transform: translate(-50%, 0);
+}
 /*# sourceMappingURL=icesnow.css.map */
