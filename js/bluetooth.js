@@ -28,14 +28,13 @@
         var deferred = $q.defer();
         promises.push(deferred.promise);
         
-        const child = exec('hcitool name ' + device.id,
-			(error, stdout, stderr) => {
-				if (error === null) {
-					deferred.resolve(stdout);
-				} else {
-					deferred.reject(error);
-				}
-			});		  
+        const child = exec('hcitool name ' + device.id, (error, stdout, stderr) => {
+					if (error === null) {
+						deferred.resolve(stdout);
+					} else {
+						deferred.reject(error);
+					}
+				});		  
 	  });	 
 	  
 	  // When all promises ready...	  

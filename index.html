@@ -97,11 +97,6 @@
       <div class="middle-center">
         <h1>{{greeting}}</h1>
         <div ng-show="(focus == 'default') && (bluetoothDevices.length > 0)"> 
-			<ul class="calendar fade" >
-				<li class="event" ng-repeat="id in bluetoothDevices">
-					<h2>{{id}}</h2>
-				</li>
-			</ul>
         </div>
         <h3 ng-show="!(user.name === undefined)">{{user.name}}</h3>
         <!-- <div class="listening" ng-show="listening">Ready: {{focus}}</div> -->
@@ -128,6 +123,11 @@
       </div>
       <div class="bottom-center">
         <!-- Command list -->
+        <ul class="calendar fade" >
+				  <li class="event" ng-repeat="id in bluetoothDevices">
+					  <h2>{{id}}</h2>
+				  </li>
+			  </ul>
         <div class="commands animate-grow" ng-show="focus == 'commands'">
           <h2>{{ 'commands.title' | translate }}</h2>
           <dl>
