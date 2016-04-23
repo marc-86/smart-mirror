@@ -151,7 +151,7 @@
                     console.log(error);
                 });
 			}
-            // $interval(refreshBluetoothPresentDevices, config.bluetooth.refreshTime * 1000);
+            $interval(refreshBluetoothPresentDevices, config.bluetooth.refreshTime * 1000);
         };
 
         _this.init();
