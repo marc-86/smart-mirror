@@ -24,27 +24,27 @@
 		console.log("checkBluetoothIDPresent entered...");
 		const exec = require('child_process').exec;
 		
-		const child1 = exec("hciconfig", (error, stdout, stderr) => {
-					console.log("hciconfig =>" + error + "####" + stdout + "####" + stderr);
-				});	
+		// const child1 = exec("hciconfig", (error, stdout, stderr) => {
+		// 			console.log("hciconfig =>" + error + "####" + stdout + "####" + stderr);
+		// 		});	
 				
-		const child2 = exec("hcitool name 44:00:10:AE:5A:BD", (error, stdout, stderr) => {
-					console.log("hcitool name =>" + error + "####" + stdout + "####" + stderr);
-				});	
+		// const child2 = exec("hcitool name 44:00:10:AE:5A:BD", (error, stdout, stderr) => {
+		// 			console.log("hcitool name =>" + error + "####" + stdout + "####" + stderr);
+		// 		});	
 		
-		// angular.forEach(devices, function(device) {
-    //     var deferred = $q.defer();
-    //     promises.push(deferred.promise);
-    //     var command = 'hcitool name ' + device.id;
-		// 		console.log("Trying: " + command); 
-    //     const child = exec(command, (error, stdout, stderr) => {
-		// 			if (error === null) {
-		// 				deferred.resolve(stdout);
-		// 			} else {
-		// 				deferred.reject(error);
-		// 			}
-		// 		});		  
-	  // });	 
+		angular.forEach(devices, function(device) {
+        var deferred = $q.defer();
+        promises.push(deferred.promise);
+        var command = 'hcitool name ' + device.id;
+				console.log("Trying: " + command); 
+        const child = exec(command, (error, stdout, stderr) => {
+					if (error === null) {
+						deferred.resolve(stdout);
+					} else {
+						deferred.reject(error);
+					}
+				});		  
+	  });	 
 	  
 	  // When all promises ready...	  
 	  return $q.all(promises).then(function(data) {        						
