@@ -287,8 +287,10 @@ body {
     -webkit-order: 1;
     order: 1; }
   .top-left .calendar .event-details .details {
-      font-size: 18px;
-      padding-left: 110px;
+    padding-left: 110px;
+    font-size: 20px;
+    color: lightgray;
+    font-style: italic;
   }
 
 /*

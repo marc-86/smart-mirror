@@ -27,8 +27,9 @@
 		angular.forEach(devices, function(device) {
         var deferred = $q.defer();
         promises.push(deferred.promise);
-        
-        const child = exec('hcitool name ' + device.id, (error, stdout, stderr) => {
+        var command = 'hcitool name ' + device.id;
+				console.log("Trying: " + command); 
+        const child = exec(command, (error, stdout, stderr) => {
 					if (error === null) {
 						deferred.resolve(stdout);
 					} else {
@@ -42,12 +43,12 @@
         var devices = [];
         console.log("promises ready...");
         for (var i = 0; i < promises.length; i++) {  
-			console.log(data[i]);
-			if(data[i] !== ''){
-				console.log("bt-dev: "+data[i]);
-				devices.push(config.bluetooth.devices[i].name);	
-			}
-		}
+					console.log(data[i]);
+					if(data[i] !== ''){
+						console.log("bt-dev: "+data[i]);
+						devices.push(config.bluetooth.devices[i].name);	
+					}
+				}
 		
 		service.presentdevices.push.apply(service.presentdevices, devices);
 	  });
