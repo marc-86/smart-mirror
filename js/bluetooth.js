@@ -24,14 +24,6 @@
 		console.log("checkBluetoothIDPresent entered...");
 		const exec = require('child_process').exec;
 		
-		// const child1 = exec("hciconfig", (error, stdout, stderr) => {
-		// 			console.log("hciconfig =>" + error + "####" + stdout + "####" + stderr);
-		// 		});	
-				
-		// const child2 = exec("hcitool name 44:00:10:AE:5A:BD", (error, stdout, stderr) => {
-		// 			console.log("hcitool name =>" + error + "####" + stdout + "####" + stderr);
-		// 		});	
-		
 		angular.forEach(devices, function(device) {
         var deferred = $q.defer();
         promises.push(deferred.promise);
