@@ -11,7 +11,7 @@
         GiphyService,
         TrafficService,
         BluetoothService,
-        DistanceService,
+        // DistanceService,
         $rootScope, $scope, $timeout, $interval, tmhDynamicLocale, $translate) {
         var _this = this;
         $scope.listening = false;
@@ -111,10 +111,10 @@
             refreshMirrorData();
             $interval(refreshMirrorData, 1500000);
 
-            var checkPresence = function () {                
-                console.log("New Distance" + DistanceService.distance);    
-            }
-            $interval(checkPresence, 1000);
+            // var checkPresence = function () {                
+            //     console.log("New Distance" + DistanceService.distance);    
+            // }
+            // $interval(checkPresence, 1000);
 
             var greetingUpdater = function () {
                 if (!Array.isArray(config.greeting) && typeof config.greeting.midday != 'undefined') {
